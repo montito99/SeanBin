@@ -1,0 +1,300 @@
+* {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	background-color: #e5e7d3;
+	color: #4f4f4f;
+	font: 13px/1 Arial, sans-serif;
+}
+
+h2,
+h3,
+h4 {
+	line-height: 2;
+}
+
+h2 {
+	font-size: 1.385em;
+
+}
+
+h3 {
+	font-size: 1.231em;
+}
+
+p {
+	line-height: 1.5;
+	margin-bottom: 1em;
+}
+
+a:link,
+a:visited,
+a:active {
+	color: #873355;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.wrap {
+	margin: 0 auto;
+	max-width: 987px;
+	padding: 0 8px;
+}
+
+header {
+	background-color: #4288ff;
+	height: 34px;
+	line-height: 34px;
+}
+
+header h1 {
+	color: #fff;
+	float: left;
+	font-size: 1.846em;
+	font-variant: small-caps;
+}
+
+nav {
+	float: right;
+}
+
+ul {
+	list-style: none;
+}
+
+nav li {
+	display: inline;
+	margin-left: 13px;
+}
+
+.hook {
+	display: block;
+	margin: 13px 0;
+}
+
+/*input,
+select {
+	height: 34px;
+}
+
+select {
+	cursor: pointer;
+	width: 144px;
+}
+
+*/
+
+.io input[type="text"],
+.io input[type="password"]
+{
+	padding: 0 3px;
+	width: 100%;
+}
+
+#pw {
+	display: table;
+	width: 100%;
+}
+
+#pw span,
+#pw input[type="button"] {
+	display: table-cell;
+}
+
+span#pw {
+	width: 100%;
+}
+
+
+/*input[type="reset"]:hover {
+	color: #abc;
+}
+*/
+footer {
+	font-size: 1em;
+	margin-top: 50px;
+	text-align: center;
+}
+
+/*#error {
+	margin: 13px 0;
+	padding: 8px 8px;
+	font-size: 15px;
+}
+*/
+/*#error {
+	background-color: #fcc;
+	border: 1px solid #f88;
+	color: #800;
+	margin: 13px 0;
+	padding: 13px 8px;
+}
+*/
+
+.alert {
+	padding: 0px;
+	margin-top: 15px;
+}
+.alert:empty {
+	display: none;
+}
+.error {
+	display: block;
+	padding: 15px;
+	/*margin-bottom: 15px;*/
+	/*border: 2px #CCC solid;*/
+}
+
+.error:nth-child(2) {
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+.error:last-child {
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+
+textarea {
+	min-height: 233px;
+	min-width: 100%;
+	resize: both;
+}
+#imgdiv {
+	height: auto;
+	margin: 20px auto;
+	float: bottom;
+	display: block;
+	width: 500px;
+}
+
+#cipherimg {
+	width: 500px;
+}
+
+.form-control {
+	background-color: #BDC0FF;
+}
+
+form {
+	margin-top: 40px;
+}
+.btn-file {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px 0px 0px 4px;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+select.form-control {
+	width:25%;
+}
+.col-sm-10 {
+	padding: 0px;
+}
+.col-sm-2 {
+	padding-left: 0px;
+}
+input.form-control {
+	width: 100%;
+}
+
+.col-sm-2 button.btn.btn-primary ,
+.col-sm-2 button.btn.btn-default {
+	margin-left: -5px;
+	border-radius: 2px 4px 4px 2px;
+
+}
+
+.modal-body img{
+	display: block;
+	width: 538px !important;
+	height: auto;
+    margin: auto;
+    vertical-align: middle;
+    position: static;
+}
+
+.modal-footer {
+	margin-top: 0px;
+	padding: 5px 20px 10px;
+}
+
+.row {
+	margin: 13px 0;
+	margin-left: 0px;
+	padding-left: 0px;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary {
+	color: #FFF;
+	background-color: rgb(52, 135, 209);
+	border-color: #285E8E;
+}
+/*.btn-default:focus,
+.btn-default:hover {
+    background-color: #fff;
+    border-color: #ccc;
+}*/
+
+.btn-primary:not(:hover) {
+	background-color: #4288FF;
+}
+.btn-default:not(:hover) {
+	background-color: #FFF;
+}
+
+body.modal-open {
+	overflow: hidden;
+	margin-right: inherit !important;
+	padding-right: 0px !important
+}
+.glyphicon {
+	margin-right: 5px;
+}
+
+.close {
+	margin-right: 5px;
+}
+
+#downloadBtn {
+	margin-right: 0px;
+	float: right;
+	position: relative;
+    top: 45px;
+    right: 3%;
+    text-align: center;
+    display:block;
+    border: 1px solid rgba(68, 58, 237, 0.41);
+    padding: 6px 10px 6px 12px;
+}
+.glyphicon.glyphicon-save {
+	margin-right: 0px;
+}

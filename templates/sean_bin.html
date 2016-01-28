@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% block body %}
+
+    <div class="modal fade" id ="modalPopup" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="title">Your Image</h4>
+          </div>
+          <div class="modal-body">
+          <img id="img" src="" alt="your image"></img>
+      	  </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" data-dismiss="modal">Seems good</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <!-- ============= info popup ============= -->
+<form role="form" action="go" method="POST" id="paste" autocomplete="off">
+	<div class="row">
+		<div id="image" class="col-sm-2">
+			<div class="input-group">
+	  			<span class="btn btn-primary btn-file">Upload Image!<input name="imgfile" id="imgfile" type="file" accept="image/*" onchange='readURL(this)' aria-describedby="basic-addon1"></span>
+	  			<span class="input-group-addon" aria-describedby="basic-addon1" id="basic-addon1">Select an image</span></div>
+		</div>
+	</div>
+			
+	<div class="row">
+		<div class="col-sm-10">
+			<span id="pw"><input name="password" aria-describedby="basic-addon2" type="password" class="form-control" placeholder="Protect with a password or generate one" onkeypress="setPasswordVisible(false);return event.keyCode != 13;"></span>
+		</div>
+		<div class="col-sm-2">
+			<button class="btn btn-primary" type="button" onclick="setPasswordVisible(true);onGeneratePassword();">Generate Password</button>
+		</div>
+	</div>
+		<div class="row">
+			<select name="expiration" class="form-control">
+				<option value="" disabled="" selected="">Expiration Time</option>
+				<option value="10seconds">10 Seconds</option>
+				<option value="minute">1 Minute</option>
+				<option value="10minutes">10 Minutes</option>
+				<option value="hour">Hour</option>
+				<option value="day">Day</option>
+				<option value="week">Week</option>
+				<option value="month">Month</option>
+				<option value="year">Year</option>
+				<option value="infinite">Infinite</option>
+			</select>
+		</div>
+	<div class="btn-group" role="group" aria-label="...">
+		<input id="Submit" type="button" class="btn btn-primary" value="Bin It!" onclick="onEncrypt();">
+		<input type="reset" class="btn btn-default" value="Reset" onclick="$('#basic-addon1').text('Select an image');">
+	</div>
+<!-- 	<span class="btn btn-default btn-file">
+    	Browse <input type="file">
+	</span>
+ --></form>
+</div>
+{% endblock %}
