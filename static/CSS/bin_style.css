@@ -68,8 +68,16 @@ nav {
 	float: right;
 }
 
-ul {
-	list-style: none;
+ul#faqs {
+	margin-top: 50px;
+	list-style-type: disc;
+	margin-top: 20px;
+	background-color: rgba(66, 136, 255, 0.4);
+	padding: 20px 20px;
+	border-radius: 4px;
+}
+ul#faqs li h3 {
+	margin-left: 20px;
 }
 
 nav li {
@@ -167,6 +175,7 @@ footer {
 textarea {
 	min-height: 233px;
 	min-width: 100%;
+	max-width: 100%;
 	resize: both;
 }
 #imgdiv {

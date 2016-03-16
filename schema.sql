@@ -5,4 +5,3 @@ create table pastes (
 	expiration text not null,
 	added integer not null
 );
-

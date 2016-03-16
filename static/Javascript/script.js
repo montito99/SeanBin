@@ -69,7 +69,7 @@ function onGeneratePassword() {
 
 
 function readURL(input){
-	var max = 260000;
+	var max = 254842;
 	file_size = input.files[0].size;
 	console.log(file_size);
 	var reader = new FileReader();
@@ -79,19 +79,24 @@ function readURL(input){
 	}
 	reader.onload = function (evt) {
 		file_data = evt.target.result;
-		console.log("img src: " + file_data);
-		$("#img")
-			.attr('src', file_data)
-    		.width(538)
-    	if (file_size > max) {
-    		$("img").attr('src', jic.compress(document.getElementById("img"), 260000/file_size));
-    		window.open(document.getElementById("img").src);
-    		file_data = document.getElementById("img").src;
+		// console.log("img src: " + file_data);
+		if (file_size <= max){
+			console.log("image is below the max size");
+			$("#img")
+				.attr('src', file_data)
+	    		.width(538)
+	    	var array = input.value.split("\\");
+			var file_name = array[array.length-1];
+			$("#title").text(file_name);
+			$("#basic-addon1").text(file_name);
+			$('#modalPopup').modal(options);
+
+    	} else{
+            createError("Uploaded image is to large, submit a smaller one!", 'dangers');
+    		// $("img").attr('src', downScaleImage(document.getElementById("img"), max/file_size));
+    		// window.open(document.getElementById("img").src);
+    		
     	}
-		$("#title").text(input.value);
-		array = input.value.split("\\");
-		$("#basic-addon1").text(array[array.length-1]);
-		$('#modalPopup').modal(options);
     };
     if (file_size < max) {
     	reader.readAsDataURL(input.files[0]);
@@ -127,6 +132,7 @@ $.fn.checkSize = function(url){
 }
 
 function onEncrypt() {
+	file_data = document.getElementById("img").src;
 	var form = document.getElementById("paste");
 	var image = document.getElementById("image");
 
@@ -153,27 +159,34 @@ function onEncrypt() {
 
 			// Encrypt the plain text using the password to a Base64 string
 			// console.log(file_content);
-			console.log("file size after compression: " + $.fn.checkSize(document.getElementById("img").src));
+			// console.log("file size after compression: " + $.fn.checkSize("javascript:alert('hi')"));
 			file_content = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(sjcl.encrypt(form.password.value, file_content, {ks: 256})));
 
 			// Check that the cipher text is below the maximum character limit
 			
 
-			if (file_content.length < 26000000) {
+			if (file_content.length < 607062) {
 				// Clear the password and plain text as a security measure
 				form.password.value = null;
 
 				// Delete the password completely before submitting any data
 				form.password.remove();
 				image.innerHTML = '<textarea name="imgfile"></textarea>';
+				image.removeAttribute('class');
 				form.imgfile.value = file_content;
+				// var url = 'data:application/octet-stream;,' + file_content;
+				// var a = document.createElement('a');
+				// a.setAttribute('href', url);
+				// a.setAttribute('download', 'cipher.txt');
+				// form.appendChild(a);
+				// a.click();
+
 				// Submit the cipher text and expiration time
-				// form.submit();
+				form.submit();
 
 			} else {
 				// Reset the form elements as editable
 				setFormReadonly(false);
-				// console.log(file_content.length);
 				createError("Maximum file size exceeded", 'dangers');
 			}
 		} catch (e) {
@@ -216,9 +229,9 @@ function onDecrypt(data) {
 				imgdiv.insertBefore(button, imgdiv.firstChild);
 			}
 			
+			var url = image.src.replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
 			// The download button click function will save the dectypted image to the local disk
 			$('#downloadBtn').click(function(){
-				var url = image.src.replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
 				var a = document.createElement('a');
 				a.setAttribute('href', url);
 				a.setAttribute('download', 'image.jpeg');

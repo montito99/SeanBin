@@ -24,4 +24,6 @@ CONSOLE_FORMATS = {logging.DEBUG :"DBG: %(module)s: %(lineno)d: %(message)s",
 FILE_FORMATS = {'DEFAULT' : "%(asctime)s: %(levelname)s- %(message)s",
 		'datefmt' : "%Y-%m-%d %H:%M:%S"}
 
-CONTEXT = ('server.key', 'server.cert')
+with open("BeanCipher.txt", 'r') as fr:
+	BEANCIPHER = fr.read()
+	fr.close()
