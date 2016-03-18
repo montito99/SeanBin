@@ -120,9 +120,9 @@ def demo(pasteid):
         abort(404)
     return cipher
 
-@app.route('/fonts/<filename>')
+@app.route('/Fonts/<filename>')
 def fonts(filename):
-    return send_from_directory(os.path.join(app.root_path, 'static/fonts'), secure_filename(filename))
+    return send_from_directory(os.path.join(app.root_path, 'static/Fonts'), secure_filename(filename))
 
 @app.route('/faq')
 def faq():
