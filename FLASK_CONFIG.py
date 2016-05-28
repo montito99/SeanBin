@@ -27,3 +27,8 @@ FILE_FORMATS = {'DEFAULT' : "%(asctime)s: %(levelname)s- %(message)s",
 with open("BeanCipher.txt", 'r') as fr:
 	BEANCIPHER = fr.read()
 	fr.close()
+FAQS = {
+	"What is SeanBin?" : "SeanBin is the cryptographic PasteBin for your photos.",
+	"How does SeanBin secure your photos?": "By encrypting your photo on the client side, and sending only the cipher to our servers.",
+	"What encrypting algorithms does it use?": "SeanBin utilizes SJCL, the Stanford JScript Cryptography Library. Read more about it <a href='https://crypto.stanford.edu/sjcl/'>here</a>"
+}

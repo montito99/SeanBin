@@ -7,19 +7,6 @@ from FLASK_CONFIG import EXPIRATIONS
 from time import *
 from log import GetLogger
 
-# python string formatting
-# Remove the expired pastes using 1 thread, which reads from the database
-
-# Delete the css and HTML and design it using bootstrap
-#All the debuging should utilize Debugging
-
-# Worker thread:
-# while True:
-#   try:
-#        do something
-#   execpt:
-#        log and sababa
-#   sleep
 
 app = Flask(__name__)
 app.config.from_object('FLASK_CONFIG')
@@ -51,7 +38,6 @@ def start_thread():
     def worker():
         logging.info("Started working thread")
         with closing(connect_db()) as db:
-            # fix sql injection
             while True:
                 try:
                     cur_time = int(time())
@@ -127,15 +113,10 @@ def fonts(filename):
 @app.route('/faq')
 def faq():
     return render_template('FAQ.html'), 200
-@app.route('/upload', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        f = request.files['file']
-        print f.filename
-        f.save(os.path.join(app.root_path, secure_filename(f.filename)))
-        return redirect(url_for('hello'))
-    return render_template('upload.html'), 200
-
+@app.route('/video.mp4')
+def vid():
+    print "Someone is watching the video"
+    return send_from_directory(app.root_path, 'video.mp4')
 @app.route('/files/<filename>')
 def sendfile(filename):
     return send_from_directory(app.root_path, 'wish.mp3')
