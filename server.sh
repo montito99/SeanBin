@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#d
 clear
 echo "[+] Removing old DB"
 rm flask.db
