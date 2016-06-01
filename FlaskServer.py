@@ -5,13 +5,12 @@ from werkzeug import secure_filename
 from threading import Thread
 from FLASK_CONFIG import EXPIRATIONS
 from time import *
-from log import GetLogger
+from log import *
 
 
 app = Flask(__name__)
 app.config.from_object('FLASK_CONFIG')
 logging = GetLogger(app.config['CONSOLE_FORMATS'], app.config['FILE_FORMATS'])
-
 
 def init_db():
     with closing(connect_db()) as db:
