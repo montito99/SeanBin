@@ -13,21 +13,24 @@ class SpecialFormatter(logging.Formatter):
 		self._fmt = self.FORMATS.get(record.levelno, self.FORMATS['DEFAULT'])
 		return logging.Formatter.format(self, record)
 
+def GetStreamHandler(CONSOLE_FORMATS):
+	streamHandler = logging.StreamHandler(sys.stderr)
+	streamHandler.setFormatter(SpecialFormatter(CONSOLE_FORMATS))
+	streamHandler.setLevel(logging.INFO)
+	return streamHandler
+
+def GetFileHandler(FILE_FORMATS):
+	fileHandler = logging.FileHandler("log.log")
+	fileHandler.setFormatter(SpecialFormatter(FILE_FORMATS))
+	fileHandler.setLevel(logging.DEBUG)
+	return fileHandler
 
 def GetLogger(CONSOLE_FORMATS, FILE_FORMATS):
 	root = logging.getLogger()
 	root.setLevel(logging.DEBUG)
 
-	hdlr = logging.StreamHandler(sys.stderr)
-	hdlr.setFormatter(SpecialFormatter(CONSOLE_FORMATS))
-	hdlr.setLevel(logging.INFO)
-	root.addHandler(hdlr)
-
-
-	fileHandler = logging.FileHandler("log.log")
-	fileHandler.setFormatter(SpecialFormatter(FILE_FORMATS))
-	fileHandler.setLevel(logging.DEBUG)
-	root.addHandler(fileHandler)
+	root.addHandler(GetStreamHandler(CONSOLE_FORMATS))
+	root.addHandler(GetFileHandler(FILE_FORMATS))
 
 	return root
 
