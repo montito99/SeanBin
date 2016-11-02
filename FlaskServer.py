@@ -84,14 +84,14 @@ def paste(pasteid):
         return render_template('check_bin.html', pastename=1, url = url, added = "The start of times"), 200
     elif pasteid == '1':
         flash("Not found, this paste may have expired")
-        return redirect(url_for('seanbin'))
+        return redirect(url_for('seanbin'), code=301)
     cur = g.db.execute("SELECT cipher, added FROM pastes WHERE id=?", [pasteid] )
     result = cur.fetchone()
     if result:
         return render_template('check_bin.html', pastename=pasteid, url = url, added = strftime("%c UTC", gmtime(result[1])), added_sec=result[1]), 200
     else:
         flash("Not found, this paste may have expired")
-        return redirect(url_for('seanbin'))
+        return redirect(url_for('seanbin'), code=301)
 
 @app.route('/ciphers/<int:pasteid>')
 def demo(pasteid):

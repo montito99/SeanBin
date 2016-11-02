@@ -255,7 +255,7 @@ input.form-control {
 }
 
 .row {
-	margin: 13px 0;
+	margin: 20px 0;
 	margin-left: 0px;
 	padding-left: 0px;
 }
@@ -269,17 +269,22 @@ input.form-control {
 	background-color: rgb(52, 135, 209);
 	border-color: #285E8E;
 }
-/*.btn-default:focus,
-.btn-default:hover {
-    background-color: #fff;
-    border-color: #ccc;
-}*/
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+.btn-default.active
+.open .dropdown-toggle.btn-default {
+	border-color: #285E8E;
+}
+
+.btn-default:not(:hover) {
+	background-color: #FFF;
+	border-color: #357EBD;
+	top: 0px;
+}
 
 .btn-primary:not(:hover) {
 	background-color: #4288FF;
-}
-.btn-default:not(:hover) {
-	background-color: #FFF;
 }
 
 body.modal-open {
@@ -287,10 +292,12 @@ body.modal-open {
 	margin-right: inherit !important;
 	padding-right: 0px !important
 }
-.glyphicon {
+span.glyphicon {
 	margin-right: 5px;
 }
-
+span.glyphicon.glyphicon-picture {
+	margin-right: 0px;
+}
 .close {
 	margin-right: 5px;
 }

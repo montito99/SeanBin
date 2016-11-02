@@ -8,4 +8,3 @@ echo "[+] Initializing DB"
 python start.py
 echo "[+] Starting server"
 python FlaskServer.py
-tail -f log.log
