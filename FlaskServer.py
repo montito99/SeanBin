@@ -10,6 +10,8 @@ from log import *
 
 app = Flask(__name__)
 app.config.from_object('FLASK_CONFIG')
+
+
 logging = GetLogger(app.config['CONSOLE_FORMATS'], app.config['FILE_FORMATS'])
 
 def init_db():
