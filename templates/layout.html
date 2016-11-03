@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <base href="/">
+
+    <title>SeanBin - The Ultimate Diehard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/bin_style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script src="{{ url_for('static', filename='Javascript/sjcl.js') }}">/* Stanford Javascript Crypto Library */</script>
+    <script src="{{ url_for('static', filename='Javascript/aes.js') }}">/* AES (Advanced Encryption Standard) implementation from Movable Type for backwards compatibility */</script>
+    <script src="{{ url_for('static', filename='Javascript/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='Javascript/jquery-ui.min.js') }}"></script> 
+    <script src="{{ url_for('static', filename='Javascript/bootstrap.min.js') }}"></script>    
+    <script src="{{ url_for('static', filename='Javascript/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='Javascript/script2.js') }}"></script>
+
+</head>
+<body>
+    <header>
+        <div class="wrap">
+            <a href=""><h1>SeanBin</h1></a>
+            <nav><ul>
+                <li><a href="">New Paste</a></li>
+                <li><a href="faq">FAQ</a></li>
+                <li><a href="/paste/demo">A Quick Demo</a></li>
+            </ul></nav>
+        </div>
+    </header>
+        <div class="wrap">
+            <noscript>
+                <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>Javascript must be enabled in your browser in order to use SeanBin
+                </div>
+            </noscript>
+        {% if get_flashed_messages() %}
+        
+            <div class="alert alert-danger fade in" role="alert" id="dangers">
+                <a class="close" id="dangers_close" aria-label="close" onclick="clearAlerts();">&times;</a>
+                {% for error in get_flashed_messages() %}
+                    <div class="error">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>{{ error }}
+                    </div>
+                {% endfor %}
+            </div>
+            <script>
+                $.fn.focusAlert(document.getElementById('dangers'));
+            </script>
+        
+        {% else %}
+            <div class="alert alert-danger fade in" role="alert" id="dangers"></div>
+        {% endif %}
+            <div class="alert alert-warning fade in" role="alert" id="warnings"></div>
+{% block body%}{% endblock %}
+
+
+<p id="p1"></p>
+      <footer>
+        <p><a href="http://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank">AES-256</a> encryption and password generation is achieved client-side using <a href="https://crypto.stanford.edu/sjcl/" target="_blank">SJCL</a></p>
+        <p><a href="https://en.wikipedia.org/wiki/Sean_Bean">Read about Sean Bean!</a></p>
+        <p>©&nbsp;</p>
+      </footer>
+    </div>
+  
+
+</body></html>
