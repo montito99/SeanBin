@@ -36,7 +36,7 @@ function createError(e, type){
 	console.log(e);
 	var alerts = document.getElementById(type);
 	if($("#"+type).is(':empty')) {
-	// <a class="close" aria-label="close" onclick="clearAlerts(this);">&times;</a>
+
 		var close = document.createElement("a");
 		close.setAttribute("class", "close");
 		close.setAttribute("id", type + "_close");
@@ -88,7 +88,6 @@ function readURL(input){
 	var reader = new FileReader();
 	reader.onload = function (evt) {
 		file_data = evt.target.result;
-		// console.log("img src: " + file_data);
 		if (file_size <= max){
 			console.log("image is below the max size");
 			$("#img")
@@ -103,8 +102,6 @@ function readURL(input){
     	} else{
             createError("Uploaded image is to large, submit a smaller one!", 'dangers');
             documet.title = ""
-    		// $("img").attr('src', downScaleImage(document.getElementById("img"), max/file_size));
-    		// window.open(document.getElementById("img").src);
     		
     	}
     };
@@ -155,7 +152,6 @@ function onEncrypt() {
 			setFormReadonly(true);
 
 			// Encrypt the plain text using the password to a Base64 string
-			// console.log(file_content);
 			file_content = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(sjcl.encrypt(form.password.value, file_content, {ks: 256})));
 
 			// Check that the cipher text is below the maximum character limit
@@ -204,7 +200,7 @@ function onDecrypt(data) {
 			console.log("Decrypting image with sjcl");
 			image.src = sjcl.decrypt(form.password.value, sjcl.codec.utf8String.fromBits(sjcl.codec.base64.toBits(data)), {ks: 256});
 			
-			// if the download button doesn't exist after successful decrypting then it will be created
+			// If the download button doesn't exist after successful decrypting then it will be created
 			if (!document.getElementById('downloadBtn')){
 				var button = document.createElement('button');
 				button.setAttribute('class', "btn btn-defualt");

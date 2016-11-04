@@ -13,4 +13,4 @@ fi
 echo "[+] Initializing DB"
 python start.py
 echo "[+] Starting server"
-python FlaskServer.py
+python runserver.py
