@@ -2,6 +2,7 @@ from flask import *
 from FLASK_CONFIG import EXPIRATIONS
 from time import *
 from seanbin import app, logging
+import json
 
 @app.route('/favicon.ico')
 def favicon():
@@ -13,6 +14,9 @@ def index():
 
 @app.route('/go', methods=['POST'])
 def go():
+    request.form = json.loads(request.get_data())
+    # return render_template("FAQ.html")
+
     if len(request.form['imgfile']) > 607062:
         logging.info("A paste was rejected due to it being too long (%d Bytes)" % len(request.form['imgfile']))
         flash("The paste was not accepted, submit a smaller image file")
@@ -23,7 +27,10 @@ def go():
     logging.info("Inserted a paste to DB")
     cur = g.db.execute("SELECT id FROM pastes ORDER BY id desc LIMIT 1")
     result = cur.fetchone()
-    return redirect(url_for('paste', pasteid=result[0]))
+    # return redirect("https://www.facebook.com/", code=301)
+    resp = Response("")
+    resp.headers['Location'] = url_for('paste', pasteid=result[0])
+    return resp, 200
 
 @app.route('/paste/<pasteid>')
 def paste(pasteid):

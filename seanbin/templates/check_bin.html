@@ -1,5 +1,8 @@
 {% extends "layout.html" %}
 {% block body %}
+	<script>
+	createError("Remember to keep the Paste URL!", "infos");
+	</script>
 	<form role="form" id="view" class="io" autocomplete="off">
 		<div class="hook">	Encrypted Image <a id="pastename" href="{{ url }} ">{% if pastename==1 %}Demo 
 			{% else %}{{ pastename }}{% endif %}
@@ -17,9 +20,9 @@
 		</div>
 		<div class="row" id="pw">
 			<div class="input-group">
-				<input name="password" type="password" class="form-control" placeholder="Enter {% if pastename==1 %}'SeanBean'{% else %}password{% endif %} to decrypt" onkeypress="javascript: if(event.keyCode == 13){ $.fn.decrypt({{ pastename }}); return false;}" autofocus="">
+				<input name="password" type="password" class="form-control" placeholder="Enter {% if pastename==1 %}'SeanBean'{% else %}password{% endif %} to decrypt" onkeypress="javascript: if(event.keyCode == 13){ decrypt({{ pastename }}); return false;}" autofocus="">
 				<span class="input-group-btn">
-					<input type="button" id="decryptbutton" class="btn btn-primary" value="Unbin It!" onclick="$.fn.decrypt('{{ pastename }}'); return false;">
+					<input type="button" id="decryptbutton" class="btn btn-primary" value="Unbin It!" onclick="decrypt('{{ pastename }}'); return false;">
 				</span>
 			</div>
 		</div>

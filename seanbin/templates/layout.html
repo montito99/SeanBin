@@ -44,13 +44,14 @@
                 {% endfor %}
             </div>
             <script>
-                $.fn.focusAlert(document.getElementById('dangers'));
+                focusAlert(document.getElementById('dangers'));
             </script>
         
         {% else %}
             <div class="alert alert-danger fade in" role="alert" id="dangers"></div>
         {% endif %}
             <div class="alert alert-warning fade in" role="alert" id="warnings"></div>
+            <div class="alert alert-info fade in" role="alert" id="infos"></div>
 {% block body%}{% endblock %}
 
 

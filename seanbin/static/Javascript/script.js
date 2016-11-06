@@ -1,12 +1,25 @@
 // Start the Stanford JavaScript Crypto Library (SJCL) entropy collectors
 sjcl.random.startCollectors();
 var title = document.title;
+
 var glyphClasses = {
-	'dangers' : "glyphicon glyphicon-exclamation-sign",
-	'warnings' : 'glyphicon glyphicon-warning-sign'
+	'dangers': 'glyphicon glyphicon-exclamation-sign',
+	'warnings': 'glyphicon glyphicon-warning-sign',
+	'infos': 'glyphicon glyphicon-info-sign'
 }
 
-$.fn.focusAlert = function(div){
+$(document).keyup(function(ev){
+    if(ev.keyCode == 27 && $("#modalPopup").css("display") == "block")
+    	$("#modalClose").trigger("click");
+    
+    if(ev.keyCode == 13)
+    	if ($("#modalPopup").css("display") == "block")
+    		$("#modalClose").trigger("click");
+    	else
+    		$("#Submit").trigger("click");
+});
+
+function focusAlert(div){
 	var color = $(div).css("background-color");
 	$(div).animate({
 		backgroundColor: '#59b4de solid'
@@ -19,7 +32,6 @@ $.fn.focusAlert = function(div){
 }
 
 function OpenModal() {
-	console.log($("#img").prop("src"));
 	if ($("#img").prop("src") != document.location.href) {
 		var options = {
 		            "backdrop" : "static",
@@ -42,7 +54,7 @@ function createError(e, type){
 		close.setAttribute("id", type + "_close");
 		close.setAttribute("aria-label", "close");
 		close.innerHTML = "&times;";
-		close.setAttribute("onclick", "clearAlerts(this);");
+		close.setAttribute("onclick", "clearAlerts($(this).parent());");
 		alerts.appendChild(close);
 	}
 	var span = document.createElement("span");
@@ -52,7 +64,7 @@ function createError(e, type){
 	div_error.appendChild(span);
 	div_error.appendChild(document.createTextNode(e));
 	alerts.appendChild(div_error);
-	$.fn.focusAlert(div_error);
+	focusAlert(div_error);
 }
 
 /*
@@ -84,12 +96,10 @@ function onGeneratePassword() {
 function readURL(input){
 	var max = 254842;
 	file_size = input.files[0].size;
-	console.log(file_size);
 	var reader = new FileReader();
 	reader.onload = function (evt) {
 		file_data = evt.target.result;
 		if (file_size <= max){
-			console.log("image is below the max size");
 			$("#img")
 				.attr('src', file_data)
 	    		.width(538)
@@ -101,7 +111,7 @@ function readURL(input){
 
     	} else{
             createError("Uploaded image is to large, submit a smaller one!", 'dangers');
-            documet.title = ""
+            document.title = ""
     		
     	}
     };
@@ -120,11 +130,15 @@ function ResetImgFile() {
 	Box.textContent = BoxValue;
 }
 
-function clearAlerts() {
-	$("#dangers").empty();
-	$("#warnings").empty();
+function clearAlerts(parent) {
+	parent.empty();
 }
 
+function clearAllAlerts() {
+	$("#dangers").empty();
+	$("#warnings").empty();
+	$("#infos").empty();
+}
 function onEncrypt() {
 	file_data = document.getElementById("img").src;
 	var form = document.getElementById("paste");
@@ -132,7 +146,6 @@ function onEncrypt() {
 
 
 	try{
-		console.log(file_data);
         var file_content = file_data;
     } catch (e){
 
@@ -144,14 +157,13 @@ function onEncrypt() {
 		createError(error, 'warnings');
 		return false;
     }
-	// Validate the plain text, password and expiration fields
+
 	if (file_content.length > 0 && form.password.value.length > 0 && form.expiration.selectedIndex > 0 && file_content != document.location.href) {
 		try {
 			// Set the form elements as read-only to prevent accidental manipulation
-			clearAlerts()
+			clearAllAlerts()
 			setFormReadonly(true);
 
-			// Encrypt the plain text using the password to a Base64 string
 			file_content = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(sjcl.encrypt(form.password.value, file_content, {ks: 256})));
 
 			// Check that the cipher text is below the maximum character limit
@@ -162,13 +174,28 @@ function onEncrypt() {
 				form.password.value = null;
 
 				// Delete the password completely before submitting any data
-				form.password.remove();
-				image.innerHTML = '<textarea name="imgfile"></textarea>';
-				image.removeAttribute('class');
-				form.imgfile.value = file_content;
+				// form.password.remove();
+				// image.innerHTML = '<textarea name="imgfile"></textarea>';
+				// image.removeAttribute('class');
+				// image.style.display = "none";
 
 				// Submit the cipher text and expiration time
-				form.submit();
+
+				console.log( JSON.stringify( {"imgfile":file_content, "expiration":form.expiration.value} ) );
+				$.ajax(
+					{type: "post",
+					url: "/go",
+					data: JSON.stringify({"imgfile":file_content, "expiration":form.expiration.value}),
+					dataType: "text",
+				    success: function(data, textStatus, request) {
+				    	console.log(data);
+        				window.location.href = request.getResponseHeader("Location");
+					},
+					error: function (request, textStatus, errorThrown) {
+        				console.log(errorThrown);
+        				console.log(textStatus);
+   					}
+			});
 
 			} else {
 				// Reset the form elements as editable
@@ -226,7 +253,7 @@ function onDecrypt(data) {
 			});
 
 			// Clear the danger alerts in case of successful decrypting
-			$('#dangers').empty();
+			clearAllAlerts();
 			form.password.value = null;
 
 		} catch (e) {
@@ -242,7 +269,7 @@ function onDecrypt(data) {
 	}
 }
 
-$.fn.decrypt = function(id){
+function decrypt(id){
 	// Get the image cipher from the server dinamically with Ajax
     $.get("/ciphers/"+id, function(data, status){
         console.log("Status: " + status);
@@ -258,16 +285,14 @@ $(document).ready(function(){
 });
 
 
-
-
 function AjaxError(x, e) {
 	// Function to handle ajax errors and status codes
 	if (x.status == 0) {
-		var error = '  Check Your Network.';
+		var error = 'Check Your Network.';
 	} else if (x.status == 404) {
-    	var error = 'Not found, this paste may have expired.';
+		var error = 'Not found, this paste may have expired.';
 	} else {
-	    var error = 'Unknow Error.\n' + x.responseText;
+	    var error = 'Unknown Error.\n' + x.responseText;
 	}
 	createError(error, 'dangers');
 }
