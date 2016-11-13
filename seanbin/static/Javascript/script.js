@@ -9,12 +9,15 @@ var glyphClasses = {
 }
 
 $(document).keyup(function(ev){
-    if(ev.keyCode == 27 && $("#modalPopup").css("display") == "block")
+    if(ev.keyCode == 27 && $("#modalPopup").css("display") == "block"){
     	$("#modalClose").trigger("click");
-    
+    	$("#pw").trigger("select");
+    }
     if(ev.keyCode == 13)
-    	if ($("#modalPopup").css("display") == "block")
+    	if ($("#modalPopup").css("display") == "block"){
     		$("#modalClose").trigger("click");
+    		$("#pw").trigger("select");
+    	}
     	else
     		$("#Submit").trigger("click");
 });
@@ -40,10 +43,10 @@ function OpenModal() {
 		$('#modalPopup').modal(options);
 	}
 	else
-		createError("Select an image!", "warnings");
+		createAlert("Select an image!", "warnings");
 }
 
-function createError(e, type){
+function createAlert(e, type){
 	console.log("type: "+type);
 	console.log(e);
 	var alerts = document.getElementById(type);
@@ -70,7 +73,7 @@ function createError(e, type){
 /*
 	Generates a cryptographically secure password using the SJCL random number generator
 */
-function onGeneratePassword() {
+function OnGeneratePassword() {
 	var form = document.getElementById("paste");
 	var error = document.getElementById("error");
 
@@ -81,10 +84,10 @@ function onGeneratePassword() {
 			form.password.value = sjcl.codec.base64.fromBits(sjcl.random.randomWords(12));
 			form.password.select();
 		} catch (e) {
-			createError(e);
+			createAlert(e);
 		}
 	} else {
-		createError("Random number generator requires more entropy", 'warnings');
+		createAlert("Random number generator requires more entropy", 'warnings');
 	}
 }
 
@@ -110,7 +113,7 @@ function readURL(input){
 			OpenModal()
 
     	} else{
-            createError("Uploaded image is to large, submit a smaller one!", 'dangers');
+            createAlert("Uploaded image is to large, submit a smaller one!", 'dangers');
             document.title = ""
     		
     	}
@@ -154,7 +157,7 @@ function onEncrypt() {
 		} else {
 			var error = "error: " + e;
 		}
-		createError(error, 'warnings');
+		createAlert(error, 'warnings');
 		return false;
     }
 
@@ -200,13 +203,13 @@ function onEncrypt() {
 			} else {
 				// Reset the form elements as editable
 				setFormReadonly(false);
-				createError("Maximum file size exceede", 'dangers');
+				createAlert("Maximum file size exceede", 'dangers');
 			}
 		} catch (e) {
-			createError(e, 'dangers');
+			createAlert(e, 'dangers');
 		}
 	} else {
-		createError("One or more required fields were left clear", 'warnings');
+		createAlert("One or more required fields were left clear", 'warnings');
 	}
 }
 
@@ -225,7 +228,7 @@ function onDecrypt(data) {
 
 			// Decrypt the Encrypted data using the password
 			console.log("Decrypting image with sjcl");
-			image.src = sjcl.decrypt(form.password.value, sjcl.codec.utf8String.fromBits(sjcl.codec.base64.toBits(data)), {ks: 256});
+			image.src = sjcl.GetCipher(form.password.value, sjcl.codec.utf8String.fromBits(sjcl.codec.base64.toBits(data)), {ks: 256});
 			
 			// If the download button doesn't exist after successful decrypting then it will be created
 			if (!document.getElementById('downloadBtn')){
@@ -262,14 +265,14 @@ function onDecrypt(data) {
 			image.removeAttribute('style');
 
 			// Create a danger error of the exception
-			createError(e, 'dangers');
+			createAlert(e, 'dangers');
 		}
 	} else {
-		createError("Enter password and try again!", 'warnings');
+		createAlert("Enter password and try again!", 'warnings');
 	}
 }
 
-function decrypt(id){
+function GetCipher(id){
 	// Get the image cipher from the server dinamically with Ajax
     $.get("/ciphers/"+id, function(data, status){
         console.log("Status: " + status);
@@ -294,5 +297,5 @@ function AjaxError(x, e) {
 	} else {
 	    var error = 'Unknown Error.\n' + x.responseText;
 	}
-	createError(error, 'dangers');
+	createAlert(error, 'dangers');
 }

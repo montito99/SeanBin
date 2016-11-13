@@ -111,17 +111,8 @@ select {
 	width: 100%;
 }
 
+
 #pw {
-	display: table;
-	width: 100%;
-}
-
-#pw span,
-#pw input[type="button"] {
-	display: table-cell;
-}
-
-span#pw {
 	width: 100%;
 }
 
