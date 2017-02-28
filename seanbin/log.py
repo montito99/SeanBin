@@ -42,7 +42,7 @@ if __name__ == "__main__":
 	       'DEFAULT' : "%(levelname)s: %(message)s",
 	       'datefmt' : "%Y-%m-%d %H:%M:%S"}
 
-	FILE_FORMATS = {'DEFAULT' : "%(asctime)s: %(levelname)s- %(message)s",
+	FILE_FORMATS = {'DEFAULT' : "%(asctime)s:uu %(levelname)s lalaa- %(message)s",
 			'datefmt' : "%Y-%m-%d %H:%M:%S"}
 
 	logger = getLogger(CONSOLE_FORMATS, FILE_FORMATS)

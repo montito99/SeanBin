@@ -13,7 +13,7 @@
           <div class="modal-footer">
           	<div class="row">
 			  <div class="btn-group" role="group" aria-label="...">
-	            <button class="btn btn-primary" onclick="clearAllAlerts(); $('#pw').trigger('select');" data-dismiss="modal">Seems good</button>
+	            <button class="btn btn-primary" onclick="$('#pw').focus();" data-dismiss="modal">Seems good</button>
 	          	<button class="btn btn-default" onclick="ResetImgFile()" data-dismiss="modal">Reset</button>
 	      	  </div>
 	  		</div>
@@ -31,17 +31,20 @@
   				<span class="glyphicon glyphicon-picture"></span>
   			</span>
   		</div>
-  		<script>var BoxValue = document.getElementById("SlctBox").innerHTML</script>
 	</div>
+<script type="text/javascript">
+	var BoxValue = document.getElementById("SlctBox").innerHTML
+</script>
 			
-	<div class="row">
-		<div class="col-sm-10">
-			<input id ="pw" name="password" aria-describedby="basic-addon2" type="password" class="form-control" placeholder="Protect with a password or generate one" onkeypress="setPasswordVisible(false);return event.keyCode != 13;" onblur="setPasswordVisible(false);">
+		<div class="row input-group">
+			<div id="pwcol" class="col-sm-12">
+				<input id="pw" name="password" type="password" class="form-control" placeholder="Protect with a password or generate one" >
+				<span class="glyphicon glyphicon-eye-open"></span>
+			</div>
+			<span class="input-group-btn">
+				<button id="genpw" class="btn btn-primary" type="button">Genersate Password</button>
+			</span>
 		</div>
-		<div class="col-sm-2">
-			<button class="btn btn-primary" type="button" onclick="setPasswordVisible(true);onGeneratePassword();">Generate Password</button>
-		</div>
-	</div>
 		<div class="row">
 			<select name="expiration" class="form-control">
 				<option value="" disabled="" selected="">Expiration Time</option>
@@ -59,7 +62,7 @@
 	<div class="row">
 		<div class="btn-group" role="group" aria-label="...">
 			<input id="Submit" type="button" class="btn btn-primary" value="Bin It!" onclick="document.title = 'Encrypting Image Now!'; onEncrypt();">
-			<input type="reset" class="btn btn-default" value="Reset" onclick="$('#basic-addon1').text('Select an image');">
+			<input type="reset" class="btn btn-default" value="Reset" onclick="ResetImgFile();">
 		</div>
 	</div>
 </form>

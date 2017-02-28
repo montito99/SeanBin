@@ -1,7 +1,8 @@
 import logging
 
+THREAD_SLEEP = 5
 DATABASE = 'flask.db'
-DEBUG = True
+DEBUG = False
 SECRET_KEY = 'development key'
 USERNAME = 'admin'
 PASSWORD = 'default'
@@ -13,8 +14,10 @@ EXPIRATIONS = {
 	'day' : 60.0 * 60 * 24,
 	'week' : 60.0 * 60 * 24 * 7,
 	'month' : 60.0 * 60 * 24 * 30,
-	'year' : 60.0 * 60 * 24 * 365
+	'year' : 60.0 * 60 * 24 * 365,
+	'infinite' : 'infinite'
 }
+
 CONSOLE_FORMATS = {logging.DEBUG :"DBG: %(module)s: %(lineno)d: %(message)s",
        logging.ERROR : "\033[91m%(levelname)s-\033[0m \033[97m%(message)s\033[0m",
        logging.INFO : "\033[92m%(levelname)s-\033[0m \033[97m%(message)s\033[0m",

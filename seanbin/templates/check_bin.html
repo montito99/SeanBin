@@ -17,17 +17,27 @@
 		{% endif %}
 		</div>
 		<!-- <h2>Decrypted image</h2><br> -->
-		<div id="imgdiv">
+		<div id="imgdiv" style="display: none">
+			<button type="button" id="downloadBtn" class="btn btn-defualt" >
+				<span class="glyphicon glyphicon-save"></span>
+			</button>
 			<img id="cipherimg">
 		</div>
-		<div class="row" id="pw">
-			<div class="input-group">
-				<input name="password" type="password" class="form-control" placeholder="Enter {% if pastename==1 %}'SeanBean'{% else %}password{% endif %} to decrypt" onkeypress="javascript: if(event.keyCode == 13){ decrypt({{ pastename }}); return false;}" autofocus="">
-				<span class="input-group-btn">
-					<input type="button" id="decryptbutton" class="btn btn-primary" value="Unbin It!" onclick="decrypt('{{ pastename }}'); return false;">
-				</span>
+
+		<div class="row input-group">
+			<div id="pwcol" class="col-sm-12">
+				<input id="pw" name="password" type="password" class="form-control"
+				placeholder="Enter {% if pastename==1 %}'SeanBean'{% else %}password{% endif %} to decrypt"
+				onkeypress="if(event.keyCode == 13){ GetCipher({{ pastename }}); return false;}"
+				autofocus="">
+				<span class="glyphicon glyphicon-eye-open"></span>
 			</div>
+			<span class="input-group-btn">
+				<button id="decryptbutton"  class="btn btn-primary" onclick="GetCipher('{{ pastename }}'); return false;">Unbin It!</button>
+			</span>
 		</div>
+
+
 	</form>
 </div>
 {% endblock %}

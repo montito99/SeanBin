@@ -104,19 +104,16 @@ select {
 
 */
 
-.io input[type="text"],
-.io input[type="password"]
-{
-	padding: 0 3px;
-	width: 100%;
-}
 
 
 #pw {
 	width: 100%;
+	padding-right: 34px;
 }
 
-
+#pwcol{
+	padding:0px;
+}
 /*input[type="reset"]:hover {
 	color: #abc;
 }
@@ -174,8 +171,6 @@ textarea {
 #imgdiv {
 	height: auto;
 	margin: 20px auto;
-	float: bottom;
-	display: block;
 	width: 500px;
 }
 
@@ -203,7 +198,6 @@ form {
     min-height: 100%;
     font-size: 100px;
     text-align: right;
-    filter: alpha(opacity=0);
     opacity: 0;
     outline: none;
     background: white;
@@ -214,21 +208,18 @@ form {
 select.form-control {
 	width:25%;
 }
-.col-sm-10 {
+.col-sm-10
+.col-sm-12
+.col-sm-2 {
 	padding: 0px;
 }
-.col-sm-2 {
-	padding-left: 0px;
-}
+
 input.form-control {
 	width: 100%;
 }
 
-.col-sm-2 button.btn.btn-primary ,
-.col-sm-2 button.btn.btn-default {
-	margin-left: -5px;
+.btn.btn-default {
 	border-radius: 2px 4px 4px 2px;
-
 }
 
 .modal-body img{
@@ -283,13 +274,13 @@ body.modal-open {
 	margin-right: inherit !important;
 	padding-right: 0px !important
 }
-span.glyphicon {
+div.error span.glyphicon {
 	margin-right: 5px;
 }
-span.glyphicon.glyphicon-picture {
+/*span.glyphicon.glyphicon-picture {
 	margin-right: 0px;
 }
-.close {
+*/.close {
 	margin-right: 5px;
 }
 
@@ -306,4 +297,20 @@ span.glyphicon.glyphicon-picture {
 }
 .glyphicon.glyphicon-save {
 	margin-right: 0px;
+}
+.glyphicon-eye-open:hover {
+	color: #4f4f4f;
+}
+
+span.glyphicon-eye-open {
+    display: none;
+    /*margin-right: 80px;*/
+    right: 12px;
+    position: absolute;
+    top: 12px;
+    cursor:pointer;
+    color: rgba(79,79,79,0.3);
+}
+.input-group .form-control{
+	padding-right: 18px;
 }

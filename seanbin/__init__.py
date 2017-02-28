@@ -44,14 +44,15 @@ def start_thread():
 
                     ids = [x[0] for x in cur.fetchall()]
                     if len(ids)>0:
-                        logging.debug("Deleted from database ids %s", ids)
+                        logging.debug("Deleted from database (ids {%s})" % ", ".join(map(lambda x: str(x), ids)))
                     db.execute("DELETE FROM pastes WHERE expiration+0=expiration and ?>added+expiration", [cur_time])
                     db.commit()
 
                 except Exception as e:
                     logging.error(e)
                 finally:
-                    sleep(2)
+                    sleep(app.config["THREAD_SLEEP"])
     Thread(target=delete_thread).start()
+
 #!---Routes---!#
 import seanbin.views

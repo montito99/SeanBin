@@ -8,18 +8,19 @@ var glyphClasses = {
 	'infos': 'glyphicon glyphicon-info-sign'
 }
 
-$(document).keyup(function(ev){
-    if(ev.keyCode == 27 && $("#modalPopup").css("display") == "block"){
+$(document).keyup(function(e){
+    if(e.keyCode == 27 && $("#modalPopup").css("display") == "block"){
     	$("#modalClose").trigger("click");
-    	$("#pw").trigger("select");
+    	if (!$("#pw").val()) $("#pw").focus();
     }
-    if(ev.keyCode == 13)
+    if(e.keyCode == 13){
     	if ($("#modalPopup").css("display") == "block"){
-    		$("#modalClose").trigger("click");
-    		$("#pw").trigger("select");
+    		$("#modalClose").click();
+    		if (!$("#pw").val()) $("#pw").focus();
     	}
-    	else
-    		$("#Submit").trigger("click");
+    	else $("#Submit").click();
+    }
+
 });
 
 function focusAlert(div){
@@ -48,7 +49,7 @@ function OpenModal() {
 
 function createAlert(e, type){
 	console.log("type: "+type);
-	console.log(e);
+	console.log(e.message);
 	var alerts = document.getElementById(type);
 	if($("#"+type).is(':empty')) {
 
@@ -75,14 +76,13 @@ function createAlert(e, type){
 */
 function OnGeneratePassword() {
 	var form = document.getElementById("paste");
-	var error = document.getElementById("error");
 
 	// Check that enough entropy has been collected
 	if (sjcl.random.isReady()) {
 		try {
 			// Populate the password with 12 random words encoded as a Base64 string equivalent to 64 characters
 			form.password.value = sjcl.codec.base64.fromBits(sjcl.random.randomWords(12));
-			form.password.select();
+			form.password.focus();
 		} catch (e) {
 			createAlert(e);
 		}
@@ -126,10 +126,10 @@ function readURL(input){
 	}
 }
 function ResetImgFile() {
+	file_data = null;
 	var file = document.getElementById("imgfile");
 	var Box = document.getElementById("SlctBox");
 	file.value = "";
-	file_data = "";
 	Box.textContent = BoxValue;
 }
 
@@ -173,25 +173,16 @@ function onEncrypt() {
 			
 
 			if (file_content.length < 607062) {
-				// Clear the password and plain text as a security measure
+				
 				form.password.value = null;
 
-				// Delete the password completely before submitting any data
-				// form.password.remove();
-				// image.innerHTML = '<textarea name="imgfile"></textarea>';
-				// image.removeAttribute('class');
-				// image.style.display = "none";
-
 				// Submit the cipher text and expiration time
-
-				console.log( JSON.stringify( {"imgfile":file_content, "expiration":form.expiration.value} ) );
 				$.ajax(
 					{type: "post",
-					url: "/go",
+					url: $("#paste").attr("action"),
 					data: JSON.stringify({"imgfile":file_content, "expiration":form.expiration.value}),
 					dataType: "text",
 				    success: function(data, textStatus, request) {
-				    	console.log(data);
         				window.location.href = request.getResponseHeader("Location");
 					},
 					error: function (request, textStatus, errorThrown) {
@@ -206,7 +197,7 @@ function onEncrypt() {
 				createAlert("Maximum file size exceede", 'dangers');
 			}
 		} catch (e) {
-			createAlert(e, 'dangers');
+			createAlert(e.message, 'dangers');
 		}
 	} else {
 		createAlert("One or more required fields were left clear", 'warnings');
@@ -228,44 +219,34 @@ function onDecrypt(data) {
 
 			// Decrypt the Encrypted data using the password
 			console.log("Decrypting image with sjcl");
-			image.src = sjcl.GetCipher(form.password.value, sjcl.codec.utf8String.fromBits(sjcl.codec.base64.toBits(data)), {ks: 256});
+			image.src = sjcl.decrypt(form.password.value, sjcl.codec.utf8String.fromBits(sjcl.codec.base64.toBits(data)), {ks: 256});
 			
-			// If the download button doesn't exist after successful decrypting then it will be created
-			if (!document.getElementById('downloadBtn')){
-				var button = document.createElement('button');
-				button.setAttribute('class', "btn btn-defualt");
-				button.setAttribute('id', 'downloadBtn');
-				button.setAttribute('type', 'button');
-
-				// Add the save glyphicon to the download button
-				var glyphspan = document.createElement('span');
-				glyphspan.setAttribute('class', "glyphicon glyphicon-save");
-				button.appendChild(glyphspan);
-				imgdiv = document.getElementById('imgdiv');
-				imgdiv.insertBefore(button, imgdiv.firstChild);
-			}
-			
+			$("#imgdiv").show();			
 			var url = image.src.replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
 			// The download button click function will save the dectypted image to the local disk
 			$('#downloadBtn').click(function(){
-				var a = document.createElement('a');
-				a.setAttribute('href', url);
-				a.setAttribute('download', 'image.jpeg');
-				form.appendChild(a);
-				a.click();
+				var a = $("<a>")
+    						.attr("href", url)
+    						.attr("download", "image.jpeg")
+    						.appendTo("body");
+				a[0].click();
+				a.remove();
 			});
 
-			// Clear the danger alerts in case of successful decrypting
+			// Clear all of the alerts in case of successful decrypting
 			clearAllAlerts();
 			form.password.value = null;
+			$(".glyphicon-eye-open").hide();
 
 		} catch (e) {
 			// In case of decrypting error the image src will be removed to hide it
 			image.removeAttribute('src');
 			image.removeAttribute('style');
-
+			$("#imgdiv").hide();
+			url = null;
 			// Create a danger error of the exception
-			createAlert(e, 'dangers');
+			if (e.message == "ccm: tag doesn't match") createAlert("The provided password is not valid!", "dangers");
+			else createAlert(e, 'dangers');
 		}
 	} else {
 		createAlert("Enter password and try again!", 'warnings');

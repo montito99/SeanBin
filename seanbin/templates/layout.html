@@ -5,7 +5,7 @@
 
     <title>SeanBin - The Ultimate Diehard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/bin_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/bin_style.css') }}?arg=">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <script src="{{ url_for('static', filename='Javascript/sjcl.js') }}">/* Stanford Javascript Crypto Library */</script>
     <script src="{{ url_for('static', filename='Javascript/aes.js') }}">/* AES (Advanced Encryption Standard) implementation from Movable Type for backwards compatibility */</script>
@@ -36,7 +36,7 @@
         {% if get_flashed_messages() %}
         
             <div class="alert alert-danger fade in" role="alert" id="dangers">
-                <a class="close" id="dangers_close" aria-label="close" onclick="clearAlerts();">&times;</a>
+                <a class="close" id="dangers_close" aria-label="close" onclick="clearAlerts($(this).parent());">&times;</a>
                 {% for error in get_flashed_messages() %}
                     <div class="error">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>{{ error }}
