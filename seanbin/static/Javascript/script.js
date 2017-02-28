@@ -250,15 +250,19 @@ function onDecrypt(data) {
 		}
 	} else {
 		createAlert("Enter password and try again!", 'warnings');
+		$("#imgdiv").hide();
 	}
 }
 
 function GetCipher(id){
+	if (!CipherData) {
 	// Get the image cipher from the server dinamically with Ajax
-    $.get("/ciphers/"+id, function(data, status){
-        console.log("Status: " + status);
-        onDecrypt(data);
-    });
+	    $.get("/ciphers/"+id, function(data, status){
+	        console.log("Status: " + status);
+	        CipherData = data;
+	        onDecrypt(data);
+	    });
+	} else onDecrypt(CipherData);
 }
 
 

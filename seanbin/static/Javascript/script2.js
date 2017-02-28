@@ -2,7 +2,7 @@
 	Helper functions
 */
 $(document).ready(function(){
-	var clicked=false;
+	var clicked = false;
 	$("#pw").keydown(function(e){
 		setPasswordVisible(false);
 		if($(this).val()) $(".glyphicon-eye-open").show();
