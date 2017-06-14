@@ -58,6 +58,7 @@ header {
 }
 
 header h1 {
+	margin-top: 5px;
 	color: #fff;
 	float: left;
 	font-size: 1.846em;
@@ -107,6 +108,7 @@ select {
 
 
 #pw {
+	position: initial;
 	width: 100%;
 	padding-right: 34px;
 }
@@ -114,30 +116,12 @@ select {
 #pwcol{
 	padding:0px;
 }
-/*input[type="reset"]:hover {
-	color: #abc;
-}
-*/
+
 footer {
 	font-size: 1em;
 	margin-top: 50px;
 	text-align: center;
 }
-
-/*#error {
-	margin: 13px 0;
-	padding: 8px 8px;
-	font-size: 15px;
-}
-*/
-/*#error {
-	background-color: #fcc;
-	border: 1px solid #f88;
-	color: #800;
-	margin: 13px 0;
-	padding: 13px 8px;
-}
-*/
 
 .alert {
 	padding: 0px;
@@ -149,8 +133,6 @@ footer {
 .error {
 	display: block;
 	padding: 15px;
-	/*margin-bottom: 15px;*/
-	/*border: 2px #CCC solid;*/
 }
 
 .error:nth-child(2) {
@@ -277,10 +259,7 @@ body.modal-open {
 div.error span.glyphicon {
 	margin-right: 5px;
 }
-/*span.glyphicon.glyphicon-picture {
-	margin-right: 0px;
-}
-*/.close {
+.close {
 	margin-right: 5px;
 }
 

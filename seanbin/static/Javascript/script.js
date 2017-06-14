@@ -8,6 +8,21 @@ var glyphClasses = {
 	'infos': 'glyphicon glyphicon-info-sign'
 }
 
+class FileType {
+	constructor(signs, extension) {
+		this.signs = signs;
+		this.extension = extension;
+		this.IsContPrefix = function(d) {
+			return this.signs.some(function(e,i,a) { return d.startsWith(e); });
+		}
+	}
+}
+
+var fileTypes = [
+	new FileType(["\x89\x50\x4E\x47\x0D\x0A\x1A\x0A"], "png"),
+	new FileType(["\xFF\xD8\xFF\xE0", "\xFF\xD8\xFF\xE1"], "jpg")
+];
+
 $(document).keyup(function(e){
     if(e.keyCode == 27 && $("#modalPopup").css("display") == "block"){
     	$("#modalClose").trigger("click");
@@ -42,6 +57,7 @@ function OpenModal() {
 		            "show":true
 		}
 		$('#modalPopup').modal(options);
+    	$('#dangers').empty();
 	}
 	else
 		createAlert("Select an image!", "warnings");
@@ -92,17 +108,25 @@ function OnGeneratePassword() {
 }
 
 /*
-	Encrypts the plain text with the Advanced Encryption Standard (AES) and a 256-bit key size using SJCL
+	Encrypts the file with the Advanced Encryption Standard (AES) and a 256-bit key size using SJCL
 */
 
 
 function readURL(input){
 	var max = 254842;
+	if (!input.files[0]) {
+    	ResetImgFile();
+    	createAlert("Please choose an image", "warnings");
+    	return false;
+	}
+
 	file_size = input.files[0].size;
-	var reader = new FileReader();
-	reader.onload = function (evt) {
+
+    var URIReader = new FileReader();
+	URIReader.onload = function (evt) {
 		file_data = evt.target.result;
 		if (file_size <= max){
+			console.log("image is below the max size");
 			$("#img")
 				.attr('src', file_data)
 	    		.width(538)
@@ -114,15 +138,33 @@ function readURL(input){
 
     	} else{
             createAlert("Uploaded image is to large, submit a smaller one!", 'dangers');
-            document.title = ""
-    		
+            documet.title = title;
+    		ResetImgFile();
     	}
     };
+	var ByteReader = new FileReader();
+    ByteReader.onload = function(evt) {
+		var bytes = evt.target.result;
+		console.log(bytes);
+		var imgType = "";
+		fileTypes.forEach(function(t, i, a) { console.log(t.signs, t.IsContPrefix(bytes)); if (t.IsContPrefix(bytes)) imgType = t.extension;})
+		console.log(imgType)
+		if (!imgType) {
+    		createAlert("The selected file is not an image, submit a valid image file!", 'dangers');
+			ResetImgFile();
+			bytes = "";
+		} else {
+			$("input[name=bytesdigest").val(bytes);
+	    	URIReader.readAsDataURL(input.files[0]);
+	    }
+    };
+        
+
+
     if (file_size < max) {
-    	reader.readAsDataURL(input.files[0]);
-    	$('#dangers').empty();
+    	ByteReader.readAsBinaryString(input.files[0]);
     } else {
-    	reader.readAsDataURL(input.files[0]);
+    	createAlert("Uploaded image is to large, submit a smaller one!", 'dangers');
 	}
 }
 function ResetImgFile() {
@@ -131,6 +173,7 @@ function ResetImgFile() {
 	var Box = document.getElementById("SlctBox");
 	file.value = "";
 	Box.textContent = BoxValue;
+	$("#modalClose").trigger("click");
 }
 
 function clearAlerts(parent) {
@@ -143,36 +186,20 @@ function clearAllAlerts() {
 	$("#infos").empty();
 }
 function onEncrypt() {
-	file_data = document.getElementById("img").src;
 	var form = document.getElementById("paste");
-	var image = document.getElementById("image");
 
-
-	try{
-        var file_content = file_data;
-    } catch (e){
-
-		if (e == "ReferenceError: file_data is not defined"){
-			var error = "Choose an image to encrypt";
-		} else {
-			var error = "error: " + e;
-		}
-		createAlert(error, 'warnings');
-		return false;
-    }
-
-	if (file_content.length > 0 && form.password.value.length > 0 && form.expiration.selectedIndex > 0 && file_content != document.location.href) {
+	if ($("#img").attr('src') && form.password.value.length > 0 && form.expiration.selectedIndex > 0) {
 		try {
 			// Set the form elements as read-only to prevent accidental manipulation
 			clearAllAlerts()
 			setFormReadonly(true);
 
-			file_content = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(sjcl.encrypt(form.password.value, file_content, {ks: 256})));
+			var file_name = $("#title").text();
+			var cipher = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(sjcl.encrypt(form.password.value, $("#img").attr('src') + "\r\n" + file_name, {ks: 256})));
 
 			// Check that the cipher text is below the maximum character limit
-			
 
-			if (file_content.length < 607062) {
+			if (cipher.length < 607062) {
 				
 				form.password.value = null;
 
@@ -180,7 +207,7 @@ function onEncrypt() {
 				$.ajax(
 					{type: "post",
 					url: $("#paste").attr("action"),
-					data: JSON.stringify({"imgfile":file_content, "expiration":form.expiration.value}),
+					data: JSON.stringify({"imgfile":cipher, "expiration":form.expiration.value}),
 					dataType: "text",
 				    success: function(data, textStatus, request) {
         				window.location.href = request.getResponseHeader("Location");
@@ -219,15 +246,19 @@ function onDecrypt(data) {
 
 			// Decrypt the Encrypted data using the password
 			console.log("Decrypting image with sjcl");
-			image.src = sjcl.decrypt(form.password.value, sjcl.codec.utf8String.fromBits(sjcl.codec.base64.toBits(data)), {ks: 256});
-			
-			$("#imgdiv").show();			
+
+			var decrypted = sjcl.decrypt(form.password.value, sjcl.codec.utf8String.fromBits(sjcl.codec.base64.toBits(data)), {ks: 256});
+			var array = decrypted.split("\r\n");
+
+			image.src = array[0];
+			document.title = array[1];
+			$("#imgdiv").show();
 			var url = image.src.replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
 			// The download button click function will save the dectypted image to the local disk
 			$('#downloadBtn').click(function(){
 				var a = $("<a>")
     						.attr("href", url)
-    						.attr("download", "image.jpeg")
+    						.attr("download", array[1])
     						.appendTo("body");
 				a[0].click();
 				a.remove();

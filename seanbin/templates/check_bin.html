@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 {% block body %}
-	{% if pastename!=1 %}
+
 	<script>
 	var CipherData = "";
 	createAlert("Remember to keep the Paste URL!", "infos");
 	</script>
-	{% endif %}
+	
 	<form role="form" id="view" class="io" autocomplete="off">
 		<div class="hook">	Encrypted Image <a id="pastename" href="{{ url }} ">{% if pastename==1 %}Demo 
 			{% else %}{{ pastename }}{% endif %}
