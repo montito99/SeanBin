@@ -54,5 +54,10 @@ def start_thread():
                     sleep(app.config["THREAD_SLEEP"])
     Thread(target=delete_thread).start()
 
+def redirectToIndex(code=200):
+    resp = Response("")
+    resp.headers['Location'] = url_for('index')
+    return resp, code
+
 #!---Routes---!#
 import seanbin.views

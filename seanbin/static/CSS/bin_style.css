@@ -267,12 +267,13 @@ div.error span.glyphicon {
 	margin-right: 0px;
 	float: right;
 	position: relative;
-    top: 45px;
-    right: 3%;
-    text-align: center;
-    display:block;
-    border: 1px solid rgba(68, 58, 237, 0.41);
-    padding: 6px 10px 6px 12px;
+	top: 45px;
+	right: 3%;
+	text-align: center;
+	display: block;
+	border: 1px solid rgba(68, 58, 237, 0.41);
+	padding: 6px 10px 6px 12px;
+	background-color: #F2F1F0;
 }
 .glyphicon.glyphicon-save {
 	margin-right: 0px;

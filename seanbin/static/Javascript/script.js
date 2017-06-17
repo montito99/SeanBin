@@ -1,7 +1,8 @@
 // Start the Stanford JavaScript Crypto Library (SJCL) entropy collectors
 sjcl.random.startCollectors();
 var title = document.title;
-
+var imgType = "";
+var file_name = "";
 var glyphClasses = {
 	'dangers': 'glyphicon glyphicon-exclamation-sign',
 	'warnings': 'glyphicon glyphicon-warning-sign',
@@ -20,7 +21,8 @@ class FileType {
 
 var fileTypes = [
 	new FileType(["\x89\x50\x4E\x47\x0D\x0A\x1A\x0A"], "png"),
-	new FileType(["\xFF\xD8\xFF\xE0", "\xFF\xD8\xFF\xE1"], "jpg")
+	new FileType(["\xFF\xD8\xFF\xE0", "\xFF\xD8\xFF\xE1"], "jpg"),
+	new FileType(["\x00\x00\x01\x00"], "ico")
 ];
 
 $(document).keyup(function(e){
@@ -131,7 +133,9 @@ function readURL(input){
 				.attr('src', file_data)
 	    		.width(538)
 	    	var array = input.value.split("\\");
-			var file_name = array[array.length-1];
+			array = array[array.length-1].split(".");
+			file_name = array.slice(0,array.length-1).concat(imgType).join('.');
+
 			$("#title").text(file_name);
 			$("#SlctBox").text(file_name);
 			OpenModal()
@@ -146,7 +150,6 @@ function readURL(input){
     ByteReader.onload = function(evt) {
 		var bytes = evt.target.result;
 		console.log(bytes);
-		var imgType = "";
 		fileTypes.forEach(function(t, i, a) { console.log(t.signs, t.IsContPrefix(bytes)); if (t.IsContPrefix(bytes)) imgType = t.extension;})
 		console.log(imgType)
 		if (!imgType) {
@@ -180,10 +183,14 @@ function clearAlerts(parent) {
 	parent.empty();
 }
 
-function clearAllAlerts() {
-	$("#dangers").empty();
-	$("#warnings").empty();
-	$("#infos").empty();
+function clearAlerts(parent=null) {
+	if (parent)
+		parent.empty();
+	else {
+		$("#dangers").empty();
+		$("#warnings").empty();
+		$("#infos").empty();
+	}
 }
 function onEncrypt() {
 	var form = document.getElementById("paste");
@@ -191,7 +198,7 @@ function onEncrypt() {
 	if ($("#img").attr('src') && form.password.value.length > 0 && form.expiration.selectedIndex > 0) {
 		try {
 			// Set the form elements as read-only to prevent accidental manipulation
-			clearAllAlerts()
+			clearAlerts()
 			setFormReadonly(true);
 
 			var file_name = $("#title").text();
@@ -265,7 +272,7 @@ function onDecrypt(data) {
 			});
 
 			// Clear all of the alerts in case of successful decrypting
-			clearAllAlerts();
+			clearAlerts();
 			form.password.value = null;
 			$(".glyphicon-eye-open").hide();
 

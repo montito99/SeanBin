@@ -36,6 +36,8 @@ $(document).ready(function(){
 		$('.glyphicon-eye-open').show();
 		$("#pw").focus();
 		onGeneratePassword();
+		setPasswordVisible(true);
+		$("#pw").select();
 	});
 	
 	$(".glyphicon-eye-open").mousedown(function(e){
@@ -145,12 +147,3 @@ function setFormReadonly(readonly) {
 function setPasswordVisible(visible) {
 	$("#pw").attr("type", visible ? "text" : "password");
 }
-	
-function ResetImgFile() {
-	var file = document.getElementById("imgfile");
-	var Box = document.getElementById("SlctBox");
-	file.value = "";
-	document.getElementById("img").src = "";
-	Box.innerHTML = BoxValue;
-}
-

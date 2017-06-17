@@ -16,27 +16,27 @@ def index():
 
 @app.route('/go', methods=['POST'])
 def go():
-    request.form = json.loads(request.get_data())
+    try:
+        request.form = json.loads(request.get_data())
+    except ValueError:
+        flash("Enter valid values!")
+        return redirectToIndex(422)
+
     if not set(request.form["imgfile"]).issubset(set(printable_chars)):
         flash("The selected file is not an image, submit a valid image file!")
-        resp = Response("")
-        resp.headers['Location'] = url_for('index')
-        return resp, 200
+        return redirectToIndex(422)
 
     if len(request.form["imgfile"]) > 607062:
         logging.info("A paste was rejected due to it being too long (%d Bytes)" % len(request.form["imgfile"]))
         flash("The paste was not accepted, submit a smaller image file")
-        resp = Response("")
-        resp.headers['Location'] = url_for('index')
-        return resp, 200
+        return redirectToIndex(413)
+
 
     if request.form['expiration'] in EXPIRATIONS:
         expiration = str(EXPIRATIONS[request.form['expiration']])
     else:
         flash("Enter valid values!")
-        resp = Response("")
-        resp.headers['Location'] = url_for('index')
-        return resp, 200
+        return redirectToIndex(422)
     g.db.execute("INSERT into pastes (cipher, expiration, added) values (?, ?, ?)", [request.form["imgfile"], expiration, time()])
     g.db.commit()
     cur = g.db.execute("SELECT id FROM pastes ORDER BY id desc LIMIT 1")
@@ -60,21 +60,20 @@ def paste(pasteid):
         result = cur.fetchone()
         if result:
             return render_template('check_bin.html', pastename=pasteid, url = url, added = strftime("%c UTC", gmtime(result[1])), added_sec=result[1]), 200
-    else:
-        flash("Not found, this paste may have expired")
-        return redirect(url_for('index'), code=302)
+    flash("Not found, this paste may have expired")
+    return redirect(url_for('index'), code=302)
 
 @app.route('/ciphers/<int:pasteid>')
 def demo(pasteid):
     if pasteid < 1:
-        abort(400)
+        abort(404)
     cur = g.db.execute("SELECT cipher FROM pastes WHERE id=?", [pasteid])
     try:
         result = cur.fetchone()
         cipher = result[0]
     except TypeError:
         abort(404)
-    return cipher
+    return cipher, 200
 
 @app.route('/Fonts/<filename>')
 def fonts(filename):
