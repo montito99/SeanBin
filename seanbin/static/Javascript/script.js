@@ -25,7 +25,7 @@ var fileTypes = [
 	new FileType(["\x00\x00\x01\x00"], "ico")
 ];
 
-$(document).keyup(function(e){
+$(document).keydown(function(e){
     if(e.keyCode == 27 && $("#modalPopup").css("display") == "block"){
     	$("#modalClose").trigger("click");
     	if (!$("#pw").val()) $("#pw").focus();
@@ -150,6 +150,7 @@ function readURL(input){
     ByteReader.onload = function(evt) {
 		var bytes = evt.target.result;
 		console.log(bytes);
+		imgType = "";
 		fileTypes.forEach(function(t, i, a) { console.log(t.signs, t.IsContPrefix(bytes)); if (t.IsContPrefix(bytes)) imgType = t.extension;})
 		console.log(imgType)
 		if (!imgType) {
@@ -172,10 +173,11 @@ function readURL(input){
 }
 function ResetImgFile() {
 	file_data = null;
+	$("#img").attr('src', "");
 	var file = document.getElementById("imgfile");
-	var Box = document.getElementById("SlctBox");
 	file.value = "";
-	Box.textContent = BoxValue;
+	$("#SlctBox").text("");
+	$("#SlctBox").append(BoxValue);
 	$("#modalClose").trigger("click");
 }
 
@@ -201,7 +203,6 @@ function onEncrypt() {
 			clearAlerts()
 			setFormReadonly(true);
 
-			var file_name = $("#title").text();
 			var cipher = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(sjcl.encrypt(form.password.value, $("#img").attr('src') + "\r\n" + file_name, {ks: 256})));
 
 			// Check that the cipher text is below the maximum character limit
@@ -228,7 +229,7 @@ function onEncrypt() {
 			} else {
 				// Reset the form elements as editable
 				setFormReadonly(false);
-				createAlert("Maximum file size exceede", 'dangers');
+				createAlert("Maximum file size exceeded", 'dangers');
 			}
 		} catch (e) {
 			createAlert(e.message, 'dangers');
@@ -288,7 +289,9 @@ function onDecrypt(data) {
 		}
 	} else {
 		createAlert("Enter password and try again!", 'warnings');
-		$("#imgdiv").hide();
+		image.removeAttribute('src');
+		image.removeAttribute('style');
+	$("#imgdiv").hide();
 	}
 }
 

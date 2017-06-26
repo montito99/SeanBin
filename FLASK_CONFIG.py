@@ -1,11 +1,9 @@
 import logging
 
 THREAD_SLEEP = 5
-DATABASE = 'flask.db'
+DATABASE = 'seanbin.db'
 DEBUG = False
-SECRET_KEY = 'development key'
-USERNAME = 'admin'
-PASSWORD = 'default'
+SECRET_KEY = "development key"
 EXPIRATIONS = {
 	'10seconds' : 10.0,
 	'minute' : 60.0,
@@ -27,7 +25,7 @@ CONSOLE_FORMATS = {logging.DEBUG :"DBG: %(module)s: %(lineno)d: %(message)s",
 FILE_FORMATS = {'DEFAULT' : "%(asctime)s: %(levelname)s- %(message)s",
 		'datefmt' : "%Y-%m-%d %H:%M:%S"}
 
-with open("BeanCipher.txt", 'r') as fr:
+with open("BeanCipher", 'r') as fr:
 	BEANCIPHER = fr.read()
 	fr.close()
 FAQS = {

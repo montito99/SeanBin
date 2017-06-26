@@ -275,6 +275,9 @@ div.error span.glyphicon {
 	padding: 6px 10px 6px 12px;
 	background-color: #F2F1F0;
 }
+#downloadBtn:not(:hover) {
+	opacity: 0.3;
+}
 .glyphicon.glyphicon-save {
 	margin-right: 0px;
 }

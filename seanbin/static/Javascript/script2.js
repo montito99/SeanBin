@@ -44,11 +44,10 @@ $(document).ready(function(){
 		e.stopPropagation();
 		setPasswordVisible(true);
 		clicked = true;
+		$("#pw").select()
 	}).mouseup(function(e){
 		e.stopPropagation();
 		setPasswordVisible(false);
-		var val = $("#pw").val();
-		$("#pw").val(val);
 		$("#pw").focus();
 		clicked = false;
 	});

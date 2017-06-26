@@ -14,8 +14,8 @@ def favicon():
 def index():
     return render_template('sean_bin.html'), 200
 
-@app.route('/go', methods=['POST'])
-def go():
+@app.route('/submit', methods=['POST'])
+def submit():
     try:
         request.form = json.loads(request.get_data())
     except ValueError:
@@ -37,14 +37,14 @@ def go():
     else:
         flash("Enter valid values!")
         return redirectToIndex(422)
-    g.db.execute("INSERT into pastes (cipher, expiration, added) values (?, ?, ?)", [request.form["imgfile"], expiration, time()])
+    g.db.execute("INSERT into pastes (cipher, expiration, added) values (?, ?, ?);",
+        [request.form["imgfile"], expiration, time()])
+
     g.db.commit()
     cur = g.db.execute("SELECT id FROM pastes ORDER BY id desc LIMIT 1")
     result = cur.fetchone()
 
     logging.debug("Inserted a paste to DB [%s]" % result)
-    cur = g.db.execute("SELECT id FROM pastes ORDER BY id desc LIMIT 1")
-    result = cur.fetchone()
 
     resp = Response("")
     resp.headers['Location'] = url_for('paste', pasteid=result[0])
@@ -56,17 +56,17 @@ def paste(pasteid):
     if pasteid == "demo":
         return render_template('check_bin.html', pastename=1, url = url, added = "The start of times"), 200
     elif pasteid != '1':
-        cur = g.db.execute("SELECT cipher, added FROM pastes WHERE id=?", [pasteid] )
+        cur = g.db.execute("SELECT added FROM pastes WHERE id=?", [pasteid] )
         result = cur.fetchone()
         if result:
-            return render_template('check_bin.html', pastename=pasteid, url = url, added = strftime("%c UTC", gmtime(result[1])), added_sec=result[1]), 200
+            return render_template('check_bin.html', pastename=pasteid, url = url, added = strftime("%c UTC", gmtime(result[0])), added_sec=result[0]), 200
     flash("Not found, this paste may have expired")
     return redirect(url_for('index'), code=302)
 
 @app.route('/ciphers/<int:pasteid>')
-def demo(pasteid):
+def get_cipher(pasteid):
     if pasteid < 1:
-        abort(404)
+        abort(422)
     cur = g.db.execute("SELECT cipher FROM pastes WHERE id=?", [pasteid])
     try:
         result = cur.fetchone()

@@ -1,16 +1,16 @@
 #!/bin/bash
 #d
 clear
-if [ -e "flask.db" ]
+if [ -e "seanbin.db" ]
 then
 echo "[+] Removing old DB"
-rm flask.db
+rm seanbin.db
 fi
 if [ -e "log.log" ]
 then
 rm log.log
 fi
 echo "[+] Initializing DB"
-python start.py
+python initdb.py
 echo "[+] Starting server"
 python runserver.py

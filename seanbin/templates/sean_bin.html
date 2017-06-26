@@ -13,8 +13,8 @@
           <div class="modal-footer">
           	<div class="row">
 			  <div class="btn-group" role="group" aria-label="...">
-	            <button class="btn btn-primary" onclick="$('#pw').focus();" data-dismiss="modal">Seems good</button>
-	          	<button class="btn btn-default" onclick="ResetImgFile()" data-dismiss="modal">Reset</button>
+	            <button id="goodbutton" class="btn btn-primary" onclick="$('#pw').focus();" data-dismiss="modal">Seems good</button>
+	          	<button class="btn btn-default" onclick="ResetImgFile(); $('#imgfile').click()" data-dismiss="modal">Wrong Image?</button>
 	      	  </div>
 	  		</div>
           </div>
@@ -22,10 +22,10 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
     <!-- ============= info popup ============= -->
-<form role="form" action="go" method="POST" id="paste" autocomplete="off">
+<form role="form" action="submit" method="POST" id="paste" autocomplete="off">
 	<div class="row">
 		<div class="btn-group" role="group" aria-label="...">
-  			<span class="btn btn-primary btn-file" id="image">Upload Image!<input name="imgfile" id="imgfile" type="file" accept="image/*" onchange='readURL(this)' aria-describedby="basic-addon1">
+  			<span class="btn btn-primary btn-file" id="image">Upload Image!<input name="imgfile" id="imgfile" type="file" accept="image/*" onchange='readURL(this)' aria-describedby="basic-addon1" onclick="this.blur()">
   			</span>
   			<span class="btn btn-default" aria-describedby="basic-addon2" id="SlctBox" onclick="OpenModal()">
   				<span class="glyphicon glyphicon-picture"></span>
