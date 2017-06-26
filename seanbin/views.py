@@ -29,7 +29,7 @@ def submit():
     if len(request.form["imgfile"]) > 607062:
         logging.info("A paste was rejected due to it being too long (%d Bytes)" % len(request.form["imgfile"]))
         flash("The paste was not accepted, submit a smaller image file")
-        return redirectToIndex(413)
+        return redirectToIndex(400)
 
 
     if request.form['expiration'] in EXPIRATIONS:
